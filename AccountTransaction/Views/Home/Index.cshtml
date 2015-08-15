@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Account Details File Uploader";
+}
+
+<div class="jumbotron">
+    <h1>@ViewBag.Title</h1>
+</div>
+
+
+
+<form id="uploader" enctype="multipart/form-data">
+    @Html.ValidationSummary()
+    <label>Please Select the file to Upload</label>
+    <br />
+
+    <table>
+
+        <tr>
+            <td>
+                <input id="fileInput" type="file">
+            </td>
+            <td>
+                <input type="button" id="submitBox" value="Upload file" />
+            </td>
+        </tr>
+
+    </table>
+
+    <progress></progress>
+
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+            <span class="sr-only">
+                0%
+            </span>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#employeeDiv").css("visibility", "hidden");
+            $("#submitBox").click(function () {
+                //$(this).prop('diabled', true);
+                var fileInput = document.getElementById("fileInput");
+
+                if (fileInput.files.length != 0) {
+
+
+                    if (fileInput.value != null && fileInput.files[0].name.split(".")[1].toUpperCase() == "CSV") {
+                        var formdata = new FormData();
+                        formdata.append(fileInput.name, fileInput.files[0]);
+
+                        $.ajax({
+                            url: "/Home/FileUpload",
+                            contentType: false,
+                            processData: false,
+                            data: formdata,
+                            type: 'POST',
+                            success: function (responseData, textStatus, jqXHR) {
+                                alert(responseData);
+                                $("#employeeDiv").css("visibility", "visible");
+
+                            },
+
+                            error: function (responseData, textStatus, errorThrown) {
+                                alert('File Upload has failed.');
+                                $("#employeeDiv").css("visibility", "visible");
+                            }
+
+                        });
+                    }
+                    else {
+                        alert("Please select a valid file");
+                    }
+                }
+
+                else {
+                    alert("No File is selected");
+                }
+
+
+            });
+        });
+    </script>
+
+}
+
+<div id="employeeDiv">
+    <p></p>
+    @*@if (ViewBag.FileUploadStatus == "Success")
+        {*@
+    <b><font color="green">File Uploaded has been Successful</font> </b>
+    <p>Click on the link below to see Employee Details</p>
+    @Html.ActionLink("EmployeeDetails", "Index", "Employee")
+    @*}
+        else
+        {
+            <b><font color="red">File Uploaded has failed</font> </b>
+
+        }*@
+
+
+
+</div>
