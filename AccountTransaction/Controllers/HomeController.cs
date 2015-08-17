@@ -8,102 +8,75 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AccountTransaction.Helper;
+using AccountTransaction.DAL;
 
 
 namespace AccountTransaction.Controllers
 {
     public class HomeController : Controller
     {
+        private ITransactionDb _db = new TransactionContext();
+
         public ActionResult Index()
         {
             return View();
         }
 
-        //[HttpPost]
-        //public JsonResult FileUpload()
-        //{
-        //    //var check = ModelState.IsValid;
-        //    string fileName = String.Empty;
-        //    try
-        //    {
-        //        HttpPostedFileBase file = Request.Files[0] as HttpPostedFileBase;
-
-        //        //Check for extension at serveeside too
-        //        //var supportedTypes = new[] { "jpg", "jpeg", "png" };
-
-        //        //var fileExt = System.IO.Path.GetExtension(photo.FileName).Substring(1);
-
-        //        //if (!supportedTypes.Contains(fileExt))
-        //        //{
-        //        //    ModelState.AddModelError("photo", "Invalid type. Only the following types (jpg, jpeg, png) are supported.");
-        //        //    return View();
-        //        //}
-
-        //        if (file.ContentLength > 0)
-        //        {
-        //            fileName = file.FileName;
-        //            string mimeType = file.ContentType;
-        //            using (System.IO.Stream fileContent = file.InputStream)
-        //            {
-        //                //UploadCsvFile(fileContent);
-
-        //                // Add the file to server for future purpose and catching
-        //                var path = Path.Combine(Server.MapPath("~/Folder_Drop/"), fileName);
-        //                file.SaveAs(path);
-
-        //                ViewBag.FileUploadStatus = "Success";
-        //                return Json(String.Format("Succefull Uploaded and saved the file {0}", fileName));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("The File format is not correect");
-        //        }
-        //    }
-
-        //    catch (Exception)
-        //    {
-        //        Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        //        ViewBag.FileUploadStatus = "Failed";
-        //        return Json("Upload failed");
-        //    }
-
-        //}
-
 
         [HttpPost]
         public JsonResult FileUpload(UploadFileModel input)
         {
-           // string directory = @"D:\Temp\";
-
-            if (ModelState.IsValid)
+            try
             {
-                //if (input != null && input.File != null && input.File.ContentLength > 0)
-                //{
-                //    var fileName = Path.GetFileName(input.File.FileName);
-                //    input.File.SaveAs(directory+  fileName);
-                //}
+                if (ModelState.IsValid && input.File.ContentLength > 0)
+                {
+                    var path = Path.Combine(Server.MapPath("~/File_Drop/"), input.File.FileName);
 
-                //ConsoleApplication1.Program.CsvParse(input.File.InputStream);
+                    if (!System.IO.File.Exists(path))
+                    {
 
 
-                
-               var transactionList= new MyCsvHelper().ReadFile(input.File.InputStream);
-               TransactionHelper.Validation(transactionList);
 
-               
-                return Json(String.Format("Succefull Uploaded and saved the file {0}", input.File.FileName));
+                        var transactionList = new MyCsvHelper().ReadFile(input.File.InputStream);
+                        var result = TransactionHelper.ValidateFile(ref transactionList);
+
+                        //Inserting the record to DB using Bulk Insert
+                        _db.Add(transactionList);
+
+                        ViewBag.FileUploadStatus = "Success";
+
+                        //Saving the file after the Insertion is successful.
+                        input.File.SaveAs(path);
+
+                        return Json(new
+                        {
+                            RecordsUploaded = result.Item1,
+                            RecordsSkipped = result.Item2
+                        }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Conflict;
+                        ViewBag.FileUploadStatus = "Failed";
+                        return Json("This File is already uploaded. Please select a new file", JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+
+                else
+                {
+                    var allErrors = ModelState.Values.SelectMany(v => v.Errors);
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Json(allErrors);
+                }
             }
-
-            var errors = ModelState.Select(x => x.Value.Errors)
-                          .Where(y => y.Count > 0)
-                          .ToList();
-            return Json("Model State is invalid");
-
+            catch (Exception)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                ViewBag.FileUploadStatus = "Failed";
+                return Json("Please check the file and try again");
+            }
         }
-
-
-      
-
     }
 }

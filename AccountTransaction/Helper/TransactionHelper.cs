@@ -9,7 +9,7 @@ namespace AccountTransaction.Helper
 {
     public class TransactionHelper
     {
-        public static List<Transaction> Validation(List<Transaction> transactions)
+        public static Tuple<int,int> ValidateFile(ref List<Transaction> transactions)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace AccountTransaction.Helper
                                                        || (!CurrencyHelper.CurrencyList.Contains(x.CurrencyCode)));
 
                 int final = transactions.Count;
-                return transactions;
+                return Tuple.Create(final,count);
             }
             catch (Exception)
             {

@@ -44,7 +44,6 @@
                 }).attr("value", 10);
                 $("#progressMessage").show();
 
-                //$(this).prop('diabled', true);
                 var fileInput = $('#fileInput')[0];
                 if (fileInput.files.length != 0) {
 
@@ -59,25 +58,30 @@
                             data: formdata,
                             type: 'POST',
                             success: function (responseData, textStatus, jqXHR) {
-                                alert(responseData);
-                                //$("#TransactionDiv").html("<b>File Upload has been Successful</b>")
-                                //                    .css({ 'color': 'green', });
-                                $("#TransactionDiv").css("visibility", "visible");
-
                                 $('#progress').attr("value", 100);
-                                $('#progressMessage').hide();
+                                $('#progressMessage').hide();                                
+                                $('#Summary').html("<b> Summary :</b>")
+                                             .append("</br> <b>Number Of Records Uploaded are</b> :" + responseData.RecordsUploaded).css({ 'color': 'brown' })
+                                             .append("</br> <b>Number Of Records Skipped are</b> :" + responseData.RecordsSkipped)
+                                             .css("visibility", "visible")
                                 
-
+                                $("#TransactionDiv").html("<b>File Upload has been Successful</b>")
+                                                    .append("<p>Pllease click on the link below to see Transaction Details</p>")                                                    
+                                                    .append('<li>@(Html.ActionLink("TransactionDetails", "Index", "Transaction"))</li>')
+                                                    .css({ 'color': 'green' })
+                                                    .css("visibility", "visible");
                             },
 
                             error: function (responseData, textStatus, errorThrown) {
-                                alert('File Upload has failed.');
-                                $("#TransactionDiv").html("<b>File Upload has failed</b>").css({ 'color': 'red'});
+                                alert('File Upload has failed.');                                
+                                $("#TransactionDiv").html("File Upload has failed.  " +responseData.responseText.substring(1, responseData.responseText.length - 1)).css({ "color": "red", "font-weight": "bolder" })
+                                                       .css("visibility", "visible");
                                 $('#progress').css("visibility", "hidden");
                                 $('#progressMessage').css("visibility", "hidden");                                
                                 $("#employeeDiv").css("visibility", "visible");
+                                $('#Summary').css("visibility", "hidden");                               
+                             
                             }
-
                         });
                     }
                     else {
@@ -87,7 +91,9 @@
 
                 else {
                     alert("No File is selected");
-                    $('#progressMessage').css("visibility", "hidden");                    
+                    $('#progressMessage').css("visibility", "hidden");
+                    $('#progress').css("visibility", "hidden");
+                    
                 }
 
 
@@ -107,25 +113,8 @@
 
 }
 
-<div id="TransactionDiv">
-    <p></p>
+<div id="TransactionDiv"> 
+</div>
 
-
-
-    @*@if (ViewBag.FileUploadStatus == "Success")
-    {*@
-        <b><font color="green">File Upload has been Successful</font> </b>
-        <p>Click on the link below to see Transaction Details</p>
-
-    @Html.ActionLink("TransactionDetails", "Index", "Transaction")
-       
-    @*//}
-    else*@
-    @*{
-        <b><font color="red">File Uploaded has failed</font> </b>
-
-    }*@
-
-
-
+<div id="Summary">
 </div>

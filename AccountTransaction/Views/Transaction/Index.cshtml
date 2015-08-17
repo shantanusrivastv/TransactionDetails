@@ -6,9 +6,9 @@
     ViewBag.Title = "Transcation Details";
 }
 
-@*@{
-        Layout = null;
-    }*@
+@{
+     Layout = null;
+}
 
 
 <html>
@@ -35,10 +35,21 @@
         <div style="width:500px;">
             @Html.Grid(Model).Columns(columns =>
                     {
-                        columns.Add(c => c.Account).Titled("Account Name");
+                        @*columns.Add()
+                            .Encoded(false)
+                            .Sanitized(false)
+                            .SetWidth(30)
+                            .RenderValueAs(d =>
+                                @<b>
+                                    @Html.ActionLink("Edit", "Index",new { id=item.Id })
+                                </b>);*@
+
+
+                        columns.Add(c => c.Account).Titled("Account Name").Filterable(true); ;
                         columns.Add(c => c.Description).Titled("Description").Filterable(true);
                         columns.Add(c => c.CurrencyCode).Titled("CurrencyCode").Filterable(true);
                         columns.Add(c => c.Amount).Titled("Amount");
+
                     }).WithPaging(6).Sortable(true)
         </div>
     }

@@ -12,7 +12,7 @@ namespace AccountTransaction.DAL
     public class TransactionContext : DbContext,ITransactionDb
     {
         public TransactionContext()
-            : base("name=DefaultConnection")
+            : base("name=LocalDBConnection")
         {
 
 
@@ -33,8 +33,8 @@ namespace AccountTransaction.DAL
 
             try
             {
-                var En = entity as IEnumerable<Transaction>;
-                this.BulkInsert(En,options);
+                var records = entity as IEnumerable<Transaction>;
+                this.BulkInsert(records, options);
             }
 
             catch(Exception)
@@ -43,28 +43,7 @@ namespace AccountTransaction.DAL
             }
          
         }
-
-
-       public void  Add<T>(IEnumerable<Transaction> entity, string nothing ="")
-        {
-            var options = new BulkInsertOptions
-            {
-                EnableStreaming = true,
-            };
-
-            try
-            {
-                var En = entity as DbSet<Transaction>;
-                this.BulkInsert(entity,options);
-            }
-
-            catch (Exception)
-            {
-                
-            }
-
-            //Set<T>().Add(entity);
-        }
+      
 
         void ITransactionDb.Update<T>(T entity)
         {

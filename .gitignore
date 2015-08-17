@@ -1,1 +1,5 @@
 AccountTransaction/Folder_Drop/
+AccountTransaction/obj/
+AccountTransaction.Test/obj/
+AccountTransaction/bin/
+AccountTransaction/File_Drop/
