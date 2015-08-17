@@ -1,0 +1,46 @@
+﻿@model IEnumerable<AccountTransaction.Models.Transaction>
+
+@using GridMvc.Html
+
+@{
+    ViewBag.Title = "Transcation Details";
+}
+
+@*@{
+        Layout = null;
+    }*@
+
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width" />
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/grimvc.js")"></script>
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+</head>
+<body>
+    <h3>Transactions</h3>
+
+    <hr />
+    @if (ViewBag.ResultCount == 0)
+    {
+        <div>Sorry! no items present in the DB please upload the files in home page</div>
+    }
+    else
+    {
+
+        <div style="width:500px;">
+            @Html.Grid(Model).Columns(columns =>
+                    {
+                        columns.Add(c => c.Account).Titled("Account Name");
+                        columns.Add(c => c.Description).Titled("Description").Filterable(true);
+                        columns.Add(c => c.CurrencyCode).Titled("CurrencyCode").Filterable(true);
+                        columns.Add(c => c.Amount).Titled("Amount");
+                    }).WithPaging(6).Sortable(true)
+        </div>
+    }
+</body>
+</html>

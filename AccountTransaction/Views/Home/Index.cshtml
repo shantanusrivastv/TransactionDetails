@@ -3,7 +3,7 @@
 }
 
 <div class="jumbotron">
-    <h1>@ViewBag.Title</h1>
+    <h3>@ViewBag.Title</h3>
 </div>
 
 
@@ -12,23 +12,16 @@
     @Html.ValidationSummary()
     <label>Please Select the file to Upload</label>
     <br />
-
     <table>
-
         <tr>
             <td>
-                <input id="fileInput" type="file">
+                <input id="fileInput" type="file" name="File">
             </td>
             <td>
                 <input type="button" id="submitBox" value="Upload file" />
             </td>
         </tr>
-
     </table>
-
-
-
-
 </form>
 
 <progress id="progress" max="100" value="10"> </progress>
@@ -80,7 +73,8 @@
                             error: function (responseData, textStatus, errorThrown) {
                                 alert('File Upload has failed.');
                                 $("#TransactionDiv").html("<b>File Upload has failed</b>").css({ 'color': 'red'});
-                              
+                                $('#progress').css("visibility", "hidden");
+                                $('#progressMessage').css("visibility", "hidden");                                
                                 $("#employeeDiv").css("visibility", "visible");
                             }
 
@@ -93,6 +87,7 @@
 
                 else {
                     alert("No File is selected");
+                    $('#progressMessage').css("visibility", "hidden");                    
                 }
 
 
@@ -115,12 +110,14 @@
 <div id="TransactionDiv">
     <p></p>
 
-    @Html.ActionLink("TransactionDetails", "Index", "Transaction")
+
 
     @*@if (ViewBag.FileUploadStatus == "Success")
     {*@
         <b><font color="green">File Upload has been Successful</font> </b>
         <p>Click on the link below to see Transaction Details</p>
+
+    @Html.ActionLink("TransactionDetails", "Index", "Transaction")
        
     @*//}
     else*@
