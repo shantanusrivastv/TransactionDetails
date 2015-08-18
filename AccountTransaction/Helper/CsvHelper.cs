@@ -15,8 +15,7 @@ namespace AccountTransaction.Helper
             {
                 var csv = new CsvReader(new StreamReader(stm));
                 
-                    csv.Configuration.HasHeaderRecord = true;
-                    csv.Configuration.IgnoreReadingExceptions = true;
+                    csv.Configuration.HasHeaderRecord = true;                    
                     csv.Configuration.TrimHeaders = true;
                     csv.Configuration.RegisterClassMap(new CustomObjectMap());
                     var transactionList = csv.GetRecords<Transaction>().ToList();
