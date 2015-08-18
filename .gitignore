@@ -1,7 +1,7 @@
 AccountTransaction/Folder_Drop/
 AccountTransaction/obj/
 AccountTransaction.Test/obj/
-AccountTransaction/bin/
 AccountTransaction/File_Drop/
 SQLQuery2.sql
 AccountTransaction/Content/copy/
+AccountTransaction/App_Data/
