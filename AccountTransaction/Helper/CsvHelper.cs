@@ -13,14 +13,14 @@ namespace AccountTransaction.Helper
         {
             try
             {
-                using (var csv = new CsvReader(new StreamReader(stm)))
-                {
+                var csv = new CsvReader(new StreamReader(stm));
+                
                     csv.Configuration.HasHeaderRecord = true;
                     csv.Configuration.TrimHeaders = true;
                     csv.Configuration.RegisterClassMap(new CustomObjectMap());
                     var transactionList = csv.GetRecords<Transaction>().ToList();
                     return transactionList;
-                }
+                
             }
             catch (Exception)
             {

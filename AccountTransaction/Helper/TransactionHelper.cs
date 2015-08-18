@@ -12,20 +12,20 @@ namespace AccountTransaction.Helper
         {
             try
             {
-                var intialcount = transactions.Count;
+                //var intialcount = transactions.Count;
 
-                var inValidRecord = transactions.Where(x => x.Amount == 0.00m || x.Account == ConstFields.missing
-                                                       || x.Description == ConstFields.missing || x.CurrencyCode == ConstFields.missing
-                                                       || (!CurrencyHelper.CurrencyList.Contains(x.CurrencyCode))
-                                                       ).ToList();
+                //var inValidRecords = transactions.Where(x => x.Amount == 0.00m || x.Account == ConstFields.missing
+                //                                       || x.Description == ConstFields.missing || x.CurrencyCode == ConstFields.missing
+                //                                       || (!CurrencyHelper.CurrencyList.Contains(x.CurrencyCode))
+                //                                       ).ToList();
 
 
-                int count = transactions.RemoveAll(x => x.Amount == 0.00m || x.Account == ConstFields.missing
+                int inValidRecordcount = transactions.RemoveAll(x => x.Amount == 0.00m || x.Account == ConstFields.missing
                                                        || x.Description == ConstFields.missing || x.CurrencyCode == ConstFields.missing
                                                        || (!CurrencyHelper.CurrencyList.Contains(x.CurrencyCode)));
 
-                int final = transactions.Count;
-                return Tuple.Create(final,count);
+                //int final = transactions.Count;
+                return Tuple.Create(transactions.Count, inValidRecordcount);
             }
             catch (Exception)
             {
