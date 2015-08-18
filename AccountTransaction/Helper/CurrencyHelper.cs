@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Hosting;
 using System.Xml.Linq;
 
@@ -24,7 +23,6 @@ namespace AccountTransaction.Helper
                 string path = Path.Combine(HostingEnvironment.MapPath("~/Data/"), "Currency code.xml");
                 XElement po = XElement.Load(path);
 
-
                 var emplyees = from emp in po.Descendants("CcyTbl").Descendants("CcyNtry")
                                select (string)emp.Element("Ccy");
 
@@ -34,7 +32,7 @@ namespace AccountTransaction.Helper
             catch (Exception)
             {
 
-                throw new Exception("Exception occured while Populating CurrencyCode");
+                throw new Exception("Exception occured while Populating Currency Code");
             }
         }
 
@@ -42,6 +40,7 @@ namespace AccountTransaction.Helper
         {
             private set;
 
+            //Public Get
             get;
 
         }

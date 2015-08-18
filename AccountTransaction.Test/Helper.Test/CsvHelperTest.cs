@@ -10,11 +10,7 @@ namespace AccountTransaction.Test.Helper.Test
     [TestFixture]
     public class CsvHelperTest
     {
-        [Test]
-        public void Do()
-        {
 
-        }
 
         
     }

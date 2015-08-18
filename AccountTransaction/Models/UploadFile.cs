@@ -12,12 +12,10 @@ namespace AccountTransaction.Models
         [FileTypes("csv")]
         public HttpPostedFileBase File { get; set; }
     }
-
-
+    
     public class FileSizeAttribute : ValidationAttribute
     {
         private readonly int _maxSize;
-
         public FileSizeAttribute(int maxSize)
         {
             _maxSize = maxSize;
@@ -35,12 +33,10 @@ namespace AccountTransaction.Models
             return string.Format("The file size should not exceed {0}", _maxSize);
         }
     }
-
-
+    
     public class FileTypesAttribute : ValidationAttribute
     {
         private readonly List<string> _types;
-
         public FileTypesAttribute(string types)
         {
             _types = types.Split(',').ToList();

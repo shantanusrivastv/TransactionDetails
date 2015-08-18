@@ -1,11 +1,8 @@
 ﻿using AccountTransaction.Models;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AccountTransaction.Helper;
 using AccountTransaction.DAL;
@@ -23,6 +20,7 @@ namespace AccountTransaction.Controllers
         }
 
 
+        //File Uploader
         [HttpPost]
         public JsonResult FileUpload(UploadFileModel input)
         {
@@ -34,9 +32,6 @@ namespace AccountTransaction.Controllers
 
                     if (!System.IO.File.Exists(path))
                     {
-
-
-
                         var transactionList = new MyCsvHelper().ReadFile(input.File.InputStream);
                         var result = TransactionHelper.ValidateFile(ref transactionList);
 
@@ -77,6 +72,15 @@ namespace AccountTransaction.Controllers
                 ViewBag.FileUploadStatus = "Failed";
                 return Json("Please check the file and try again");
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

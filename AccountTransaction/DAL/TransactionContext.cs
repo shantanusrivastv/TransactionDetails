@@ -28,12 +28,13 @@ namespace AccountTransaction.DAL
         {
             var options = new BulkInsertOptions
             {
+                //EnableStreaming is Only available in .Net45. for high performance
                 EnableStreaming = true,
             };
 
             try
             {
-                var records = entity as IEnumerable<Transaction>;
+                var records = entity as IEnumerable<Transaction>;                
                 this.BulkInsert(records, options);
             }
 
@@ -47,7 +48,8 @@ namespace AccountTransaction.DAL
 
         void ITransactionDb.Update<T>(T entity)
         {
-            //Entry(entity).State = System.Data.EntityState.Modified;
+            
+            Entry(entity).State = EntityState.Modified;
         }
 
         void ITransactionDb.Remove<T>(T entity)
@@ -58,8 +60,7 @@ namespace AccountTransaction.DAL
         void ITransactionDb.SaveChanges()
         {
             SaveChanges();
-        }
-   
+        }   
 
     }
 }
