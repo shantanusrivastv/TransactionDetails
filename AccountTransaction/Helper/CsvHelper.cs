@@ -9,13 +9,14 @@ namespace AccountTransaction.Helper
 {
     public class MyCsvHelper
     {
-        public List<Transaction> ReadFile(Stream stm)
+        public  static List<Transaction> ReadFile(Stream stm)
         {
             try
             {
                 var csv = new CsvReader(new StreamReader(stm));
                 
                     csv.Configuration.HasHeaderRecord = true;
+                    csv.Configuration.IgnoreReadingExceptions = true;
                     csv.Configuration.TrimHeaders = true;
                     csv.Configuration.RegisterClassMap(new CustomObjectMap());
                     var transactionList = csv.GetRecords<Transaction>().ToList();

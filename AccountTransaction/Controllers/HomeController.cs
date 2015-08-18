@@ -32,7 +32,7 @@ namespace AccountTransaction.Controllers
 
                     if (!System.IO.File.Exists(path))
                     {
-                        var transactionList = new MyCsvHelper().ReadFile(input.File.InputStream);
+                        var transactionList = MyCsvHelper.ReadFile(input.File.InputStream);
                         var result = TransactionHelper.ValidateFile(ref transactionList);
 
                         //Inserting the record to DB using Bulk Insert
