@@ -66,7 +66,7 @@ namespace AccountTransaction.Controllers
                     return Json(allErrors);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 ViewBag.FileUploadStatus = "Failed";
